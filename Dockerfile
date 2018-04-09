@@ -24,7 +24,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y xubuntu-desktop tightvncse
 RUN rm -rf /var/lib/apt/lists/*
 RUN apt-get install xrdp -y
 # Configure the Ubuntu server for xrdp to know that the xfce desktop environment will be used instead of Gnome or Unity. To configure these settings, you have to type the following command in terminal.
- echo “xfce4-session” > ~/.xsession
+RUN echo “xfce4-session” > ~/.xsession
 
 RUN sudo sed -i -e '8 {s|. /etc/X11/Xsession|startxfce4|g}' /etc/xrdp/startwm.sh
 
@@ -97,10 +97,10 @@ RUN  tar xvjf StereoPipeline-2.6.0-2017-06-01-x86_64-Linux.tar.bz2
 # ENV export PATH=/home/isis3user/isis/bin:$PATH
 # ENV . $ISISROOT/scripts/isis3Startup.sh
 
-echo 'export ISISROOT=/home/isis3user/isis' >>/home/isis3user/.bash_profile
-echo 'export PATH=/home/isis3user/isis/bin:$PATH' >>/home/isis3user/.bash_profile
-echo '. $ISISROOT/scripts/isis3Startup.sh' >>/home/isis3user/.bash_profile
-echo 'export ISIS3DATA=/home/isis3user/isis3data' >>/home/isis3user/.bash_profile
+RUN echo 'export ISISROOT=/home/isis3user/isis' >>/home/isis3user/.bash_profile
+RUN echo 'export PATH=/home/isis3user/isis/bin:$PATH' >>/home/isis3user/.bash_profile
+RUN echo '. $ISISROOT/scripts/isis3Startup.sh' >>/home/isis3user/.bash_profile
+RUN echo 'export ISIS3DATA=/home/isis3user/isis3data' >>/home/isis3user/.bash_profile
 
 RUN mkdir /home/isis3user/isis/raw_data
 RUN cd /home/isis3user/isis/raw_data
