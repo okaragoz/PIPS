@@ -8,6 +8,8 @@
 # Pull base image.
 FROM ubuntu:14.04
 
+RUN echo "latest" > /version
+
 # Install.
 RUN \
   sed -i 's/# \(.*multiverse$\)/\1/g' /etc/apt/sources.list && \
@@ -93,6 +95,7 @@ RUN apt-get update -y
 RUN cd /home/isis3user
 RUN wget https://github.com/NeoGeographyToolkit/StereoPipeline/releases/download/v2.6.0/StereoPipeline-2.6.0-2017-06-01-x86_64-Linux.tar.bz2
 RUN  tar xvjf StereoPipeline-2.6.0-2017-06-01-x86_64-Linux.tar.bz2
+RUN mv StereoPipeline-2.6.0-2017-06-01-x86_64-Linux /home/isis3user
 
 # get isis3 base data (500 gb +) if you want
 # RUN mkdir /home/isis3user/isis3data
@@ -104,17 +107,22 @@ RUN  tar xvjf StereoPipeline-2.6.0-2017-06-01-x86_64-Linux.tar.bz2
 # ENV export PATH=/home/isis3user/isis/bin:$PATH
 # ENV . $ISISROOT/scripts/isis3Startup.sh
 
-#RUN echo 'export ISISROOT=/home/isis3user/isis' >>/home/isis3user/.bash_profile
-#RUN echo 'export PATH=/home/isis3user/isis/bin:$PATH' >>/home/isis3user/.bash_profile
-#RUN echo '. $ISISROOT/scripts/isis3Startup.sh' >>/home/isis3user/.bash_profile
-#RUN echo 'export ISIS3DATA=/home/isis3user/isis3data' >>/home/isis3user/.bash_profile
+RUN echo 'export ISISROOT=/home/isis3user/isis' >>/home/isis3user/.bash_profile
+RUN echo 'export PATH=/home/isis3user/isis/bin:$PATH' >>/home/isis3user/.bash_profile
+RUN echo '. $ISISROOT/scripts/isis3Startup.sh' >>/home/isis3user/.bash_profile
+RUN echo 'export ISIS3DATA=/home/isis3user/isis3data' >>/home/isis3user/.bash_profile
 
 RUN mkdir /home/isis3user/isis/raw_data
 RUN cd /home/isis3user/isis/raw_data
 RUN wget https://cdn.rawgit.com/okaragoz/PIPS/c94f2b75/rawex_file/neuctx.bat
 RUN wget https://cdn.rawgit.com/okaragoz/PIPS/c94f2b75/rawex_file/stereo.default
 
+RUN apt-get install tcsh -y
+RUN apt-get install csh -y
+RUN tcsh --version
 RUN /bin/tcsh
-RUN setenv ISISROOT /home/isis3user/isis/
-RUN source $ISISROOT/scripts/isis3Startup.csh
-RUN setenv PATH "/home/isis3user/StereoPipeline-2.6.0-2017-06-01-x86_64-Linux/bin:${PATH}"
+RUN chsh -s /usr/bin/tcsh
+# Docker does not support yet automated tcsh environment code
+#RUN setenv ISISROOT /home/isis3user/isis/
+#RUN source $ISISROOT/scripts/isis3Startup.csh
+#RUN setenv PATH "/home/isis3user/StereoPipeline-2.6.0-2017-06-01-x86_64-Linux/bin:${PATH}"
