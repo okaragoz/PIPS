@@ -15,14 +15,14 @@ RUN \
   apt-get -y upgrade && \
   apt-get install -y build-essential && \
   apt-get install -y software-properties-common && \
-  apt-get install -y byobu csh curl git htop man unzip vim wget && \
+  apt-get install -y byobu csh curl git htop man unzip vim wget xrdp && \
   rm -rf /var/lib/apt/lists/*
 
 # Install. XFCE
 RUN apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y xubuntu-desktop tightvncserver
 RUN rm -rf /var/lib/apt/lists/*
-RUN apt-get install xrdp -y
+
 # Configure the Ubuntu server for xrdp to know that the xfce desktop environment will be used instead of Gnome or Unity. To configure these settings, you have to type the following command in terminal.
 RUN echo “xfce4-session” > ~/.xsession
 
@@ -37,18 +37,18 @@ RUN add-apt-repository ppa:ubuntugis/ppa && sudo apt-get update -y
 RUN apt-get install gdal-bin -y
 
 # Add files.
-ADD root/.bashrc /root/.bashrc
-ADD root/.gitconfig /root/.gitconfig
-ADD root/.scripts /root/.scripts
+#ADD root/.bashrc /root/.bashrc
+#ADD root/.gitconfig /root/.gitconfig
+#ADD root/.scripts /root/.scripts
 
 # Set environment variables.
-ENV HOME /root
+#ENV HOME /root
 
 # Define working directory.
-WORKDIR /root
+#WORKDIR /root
 
 # Define default command.
-CMD ["bash"]
+#CMD ["bash"]
 
 MAINTAINER apr
 
@@ -70,11 +70,18 @@ RUN useradd --create-home --home-dir /home/isis3user --shell /bin/bash isis3user
 
 # Circ installation
 RUN cd /home/isis3user
-RUN git clone git@github.com:AndrewAnnex/circ.git
+RUN apt-get install openssh-server -y
+RUN service ssh restart
+RUN mkdir -p /root/.ssh
+RUN touch /root/.ssh/known_hosts
+RUN ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+RUN git clone https://github.com/AndrewAnnex/circ.git
 
 # Ajenti installation
 RUN cd /home/isis3user
-RUN curl https://raw.githubusercontent.com/ajenti/ajenti/master/scripts/install.sh | sudo bash -s -
+RUN apt-get install build-essential python-pip python-dev python-lxml libffi-dev libssl-dev libjpeg-dev libpng-dev uuid-dev python-dbus`` -y
+RUN pip install ajenti-panel ajenti.plugin.dashboard ajenti.plugin.settings ajenti.plugin.core ajenti.plugin.plugins ajenti.plugin.filemanager ajenti.plugin.notepad ajenti.plugin.packages ajenti.plugin.services ajenti.plugin.terminal
+
 
 
 # get isis3 FULL data for Ubuntu 14.04
@@ -97,10 +104,10 @@ RUN  tar xvjf StereoPipeline-2.6.0-2017-06-01-x86_64-Linux.tar.bz2
 # ENV export PATH=/home/isis3user/isis/bin:$PATH
 # ENV . $ISISROOT/scripts/isis3Startup.sh
 
-RUN echo 'export ISISROOT=/home/isis3user/isis' >>/home/isis3user/.bash_profile
-RUN echo 'export PATH=/home/isis3user/isis/bin:$PATH' >>/home/isis3user/.bash_profile
-RUN echo '. $ISISROOT/scripts/isis3Startup.sh' >>/home/isis3user/.bash_profile
-RUN echo 'export ISIS3DATA=/home/isis3user/isis3data' >>/home/isis3user/.bash_profile
+#RUN echo 'export ISISROOT=/home/isis3user/isis' >>/home/isis3user/.bash_profile
+#RUN echo 'export PATH=/home/isis3user/isis/bin:$PATH' >>/home/isis3user/.bash_profile
+#RUN echo '. $ISISROOT/scripts/isis3Startup.sh' >>/home/isis3user/.bash_profile
+#RUN echo 'export ISIS3DATA=/home/isis3user/isis3data' >>/home/isis3user/.bash_profile
 
 RUN mkdir /home/isis3user/isis/raw_data
 RUN cd /home/isis3user/isis/raw_data
