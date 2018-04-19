@@ -28,16 +28,17 @@ Currently you must have docker installation on your system 'https://docs.docker.
 
  * [OPTIONS] = Docker conatiner name with tag
  * [PATH] = Path of the Dockerfile
- * Example = `docker build . --tag pipsm:latest --file C:\Users\user\Desktop\PIPSM\Dockerfi
-let`
- `docker pull okaragoz/pipsm`
+ * Example = `docker build . --tag pipsm:latest --file C:\Users\user\Desktop\PIPSM\Dockerfile`
+
+
+`docker pull okaragoz/pipsm`
 
 Usage
 -----
 
-  Usage:       
-               x11VNC connection on 5900 port and Ajenti connection on 8000 port
-               - Circ usage: "https://github.com/AndrewAnnex/circ"
+x11VNC connection on 5900 port and Ajenti connection on 8000 port
+
+Circ usage: "https://github.com/AndrewAnnex/circ"
 
 x11VNC connection tested on RealVNC Viewer "https://www.realvnc.com/en/connect/download/viewer/windows/"
 
