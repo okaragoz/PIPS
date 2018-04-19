@@ -7,13 +7,13 @@ Ready for virtualization based on Ubuntu 14.04 + XFCE (with x11vnc server )+ ISI
 *One Click, Ready to use - Planetary Image Processing Container Stack for MARS*
 -------------------------------------------------------------------------------
 
-PIPSM generate virtual docker container for processing easily digital elevation model from CTX mosaics or HIRISE images, and then do some basic filtering and stripe overlap to come up with a reasonably minimal list of elevation models.
+PIPSM generate virtual docker container for processing easily digital elevation model from CTX mosaics or HIRISE images and then do some basic filtering and stripe overlapping to come up with a sensibly elevation models.
 
 PIPSM contains;
 - Ubuntu 14.04.03
 - XFCE (with x11vnc server)
 - ISIS3 (MRO, MEX & DEM)
-- AMES_Stereo_Pipeline v2.6
+- AMES Stereo Pipeline v2.6
 - Circ (Coordinate-dependent CTX Mosaic tool developed by Andrew Annex)
 - GDAL
 - Ajenti Core v1.
