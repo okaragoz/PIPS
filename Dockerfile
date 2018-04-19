@@ -1,37 +1,49 @@
-#
-# Ubuntu 14.04 + XFCE + ISIS3 + AMES_Stereo_Pipeline - Dockerfile
+# PIPSM
+# Ubuntu 14.04 + XFCE + ISIS3 + AMES_Stereo_Pipeline etc. - Dockerfile
 # Get Ubuntu from sources
 # https://github.com/dockerfile/ubuntu
 #
 
+FROM ubuntu:14.04.3
 
-# Pull base image.
-FROM ubuntu:14.04
+ENV HOME /root
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update -y
+RUN apt-get install -y supervisor wget \
+		xfce4 xfce4-goodies x11vnc xvfb \
+		gconf-service libnspr4 libnss3 fonts-liberation \
+		libappindicator1 libcurl3 fonts-wqy-microhei
+
+# download google chrome and install
+#RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+#RUN dpkg -i google-chrome*.deb
+#RUN apt-get install -f
+
+RUN apt-get autoclean && apt-get autoremove && \
+		rm -rf /var/lib/apt/lists/*
+
+WORKDIR /root
+
+ADD startup.sh ./
+ADD supervisord.conf ./
+
+
+
+COPY xfce4 ./.config/xfce4
+
+EXPOSE 5900
+EXPOSE 8000
 
 RUN echo "latest" > /version
 
-# Install.
-RUN \
-  sed -i 's/# \(.*multiverse$\)/\1/g' /etc/apt/sources.list && \
-  apt-get update && \
-  apt-get -y upgrade && \
-  apt-get install -y build-essential && \
-  apt-get install -y software-properties-common && \
-  apt-get install -y byobu csh curl git htop man unzip vim wget xrdp && \
-  rm -rf /var/lib/apt/lists/*
-
-# Install. XFCE
-RUN apt-get update
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y xubuntu-desktop tightvncserver
-RUN rm -rf /var/lib/apt/lists/*
-
 # Configure the Ubuntu server for xrdp to know that the xfce desktop environment will be used instead of Gnome or Unity. To configure these settings, you have to type the following command in terminal.
-RUN echo “xfce4-session” > ~/.xsession
+#RUN echo “xfce4-session” > ~/.xsession
 
-RUN sudo sed -i -e '8 {s|. /etc/X11/Xsession|startxfce4|g}' /etc/xrdp/startwm.sh
+#RUN sudo sed -i -e '8 {s|. /etc/X11/Xsession|startxfce4|g}' /etc/xrdp/startwm.sh
 
 # Start the xrdp service on Ubuntu server by typing below command in terminal.
-RUN /etc/init.d/xrdp start
+#RUN /etc/init.d/xrdp start
 
 # Get GDAL + Circ (by Andrew Annex)
 
@@ -81,26 +93,31 @@ RUN git clone https://github.com/AndrewAnnex/circ.git
 
 # Ajenti installation
 RUN cd /home/isis3user
-RUN apt-get install build-essential python-pip python-dev python-lxml libffi-dev libssl-dev libjpeg-dev libpng-dev uuid-dev python-dbus`` -y
-RUN pip install ajenti-panel ajenti.plugin.dashboard ajenti.plugin.settings ajenti.plugin.core ajenti.plugin.plugins ajenti.plugin.filemanager ajenti.plugin.notepad ajenti.plugin.packages ajenti.plugin.services ajenti.plugin.terminal
+RUN apt install -y ajenti
 
+# RUN JAvA RUN
+RUN apt-get install default-jdk
+RUN apt-get install default-jre
 
-
-# get isis3 FULL data for Ubuntu 14.04
+# get isis3 FULL required binaries for Ubuntu 14.04
 RUN rsync -azv --delete --partial \
 isisdist.astrogeology.usgs.gov::x86-64_linux_UBUNTU/isis /home/isis3user/
 
+
 # get Ames StereoPipeline data for Ubuntu 14.04
-RUN apt-get update -y
 RUN cd /home/isis3user
 RUN wget https://github.com/NeoGeographyToolkit/StereoPipeline/releases/download/v2.6.0/StereoPipeline-2.6.0-2017-06-01-x86_64-Linux.tar.bz2
-RUN  tar xvjf StereoPipeline-2.6.0-2017-06-01-x86_64-Linux.tar.bz2
+RUN tar xvjf StereoPipeline-2.6.0-2017-06-01-x86_64-Linux.tar.bz2
 RUN mv StereoPipeline-2.6.0-2017-06-01-x86_64-Linux /home/isis3user
 
-# get isis3 base data (500 gb +) if you want
+# get isis3 base data
 # RUN mkdir /home/isis3user/isis3data
-# RUN rsync -azv --delete --partial \
-# isisdist.astrogeology.usgs.gov::isis3data/data/base /home/isis3user/isis3data/
+# RUN rsync -azv --delete --partial isisdist.astrogeology.usgs.gov::isis3data/data/base /home/isis3user/isis3data/
+
+# get isis3 MARS Data
+#RUN rsync -azv --delete --partial isisdist.astrogeology.usgs.gov::isis3data/data/mro data/
+#RUN rsync -azv --delete --partial isisdist.astrogeology.usgs.gov::isis3data/data/mex data/
+
 
 # RUN touch /home/isis3user/bubbi.txts
 # ENV export ISISROOT=/home/isis3user/isis
@@ -116,12 +133,19 @@ RUN mkdir /home/isis3user/isis/raw_data
 RUN cd /home/isis3user/isis/raw_data
 RUN wget https://cdn.rawgit.com/okaragoz/PIPS/c94f2b75/rawex_file/neuctx.bat
 RUN wget https://cdn.rawgit.com/okaragoz/PIPS/c94f2b75/rawex_file/stereo.default
+RUN mv neuctx.bat /home/isis3user/isis/raw_data
+RUN mv stereo.default /home/isis3user/isis/raw_data
+RUN wget https://cdn.rawgit.com/okaragoz/PIPS/f1dba4cc/rawex_file/go.sh
+RUN mv go.sh /home/isis3user/isis/raw_data
+RUN cd /home/isis3user/isis/raw_data
+#RUN chmod +x go.sh
+#RUN ./go.sh
 
-RUN apt-get install tcsh -y
-RUN apt-get install csh -y
-RUN tcsh --version
-RUN /bin/tcsh
-RUN chsh -s /usr/bin/tcsh
+#RUN apt-get install tcsh -y
+#RUN apt-get install csh -y
+#RUN tcsh --version
+
+#RUN /bin/tcsh
 # Docker does not support yet automated tcsh environment code
 #RUN setenv ISISROOT /home/isis3user/isis/
 #RUN source $ISISROOT/scripts/isis3Startup.csh
