@@ -22,7 +22,7 @@ PIPSM contains;
 Installation
 ------------
 
-Currently you must have docker installation on your system 'https://docs.docker.com/install/#cloud', then download and run Dockerfile of the PIPSM manually or Docker Hub based installation is also available in 'https://hub.docker.com'.
+Currently you must have docker installation on your system 'https://docs.docker.com/install/', then download and run Dockerfile of the PIPSM manually or Docker Hub based installation is also available in 'https://hub.docker.com'.
 
  `docker build [OPTIONS] PATH | URL |`
 
