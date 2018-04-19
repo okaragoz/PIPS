@@ -3,10 +3,9 @@ Planetary Image Processing Docker Container Stack for MARS.
 
 Ready for virtualization based on Ubuntu 14.04 + XFCE (with x11vnc server )+ ISIS3 + AMES_Stereo_Pipeline v2.6 + Circ (Coordinate-dependent CTX Mosaic tool) + Ajenti Core 1 web based management user interface with Terminal and file accses.
 
-PIPSM
-====
 
 *One Click, Ready to use - Planetary Image Processing Container Stack for MARS*
+====
 
 PIPSM generate virtual docker container for processing easily digital elevation model from CTX mosaics or HIRISE images, and then do some basic filtering and stripe overlap to come up with a reasonably minimal list of images.
 
@@ -27,17 +26,21 @@ Currently you must have docker installation on your system 'https://docs.docker.
 
  `docker build [OPTIONS] PATH | URL |`
 
+ * [OPTIONS] = Docker conatiner name with tag
+ * [PATH] = Path of the Dockerfile
+
+ `docker pull okaragoz/pipsm`
 
 Usage
 -----
 
-.. code:: bash
+  Usage:       
+               * x11VNC connection on 5900 port is available
+               * Ajenti connection on 8000 port is available
+               * Circ usage: "https://github.com/AndrewAnnex/circ"
 
-  Usage:       x11VNC connection on 5900 port is available
-               Ajenti connection on 8000 port is available
-               Circ usage: "https://github.com/AndrewAnnex/circ"
-
+x11VNC connection tested on RealVNC Viewer "https://www.realvnc.com/en/connect/download/viewer/windows/""
 Quick reference
 ---------------
-               Where to get help:
-               the Docker Community Forums, the Docker Community Slack, or Stack Overflow
+ Where to get help about Docker:
+  - the Docker Community Forums, the Docker Community Slack, or Stack Overflow
