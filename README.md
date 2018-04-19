@@ -35,11 +35,11 @@ Usage
 -----
 
   Usage:       
-               * x11VNC connection on 5900 port is available
-               * Ajenti connection on 8000 port is available
-               * Circ usage: "https://github.com/AndrewAnnex/circ"
+               x11VNC connection on 5900 port and Ajenti connection on 8000 port
+               - Circ usage: "https://github.com/AndrewAnnex/circ"
 
-x11VNC connection tested on RealVNC Viewer "https://www.realvnc.com/en/connect/download/viewer/windows/""
+x11VNC connection tested on RealVNC Viewer "https://www.realvnc.com/en/connect/download/viewer/windows/"
+
 Quick reference
 ---------------
  Where to get help about Docker:
