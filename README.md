@@ -28,7 +28,8 @@ Currently you must have docker installation on your system 'https://docs.docker.
 
  * [OPTIONS] = Docker conatiner name with tag
  * [PATH] = Path of the Dockerfile
-
+ * Example = `docker build . --tag pipsm:latest --file C:\Users\user\Desktop\PIPSM\Dockerfi
+let`
  `docker pull okaragoz/pipsm`
 
 Usage
