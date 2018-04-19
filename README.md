@@ -5,7 +5,7 @@ Ready for virtualization based on Ubuntu 14.04 + XFCE (with x11vnc server )+ ISI
 
 
 *One Click, Ready to use - Planetary Image Processing Container Stack for MARS*
-====
+-------------------------------------------------------------------------------
 
 PIPSM generate virtual docker container for processing easily digital elevation model from CTX mosaics or HIRISE images, and then do some basic filtering and stripe overlap to come up with a reasonably minimal list of images.
 
